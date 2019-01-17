@@ -16,7 +16,7 @@ export default class IndexPage extends Component {
 
   inputChange = e => {
     const validRange = [...validNum.slice(0, this.state.from), '.']
-    const inputVal = e.target.value
+    const inputVal = e.target.value.toLowerCase()
     ;(inputVal === '' || validRange.includes(inputVal.slice(-1))) && this.setState({ inputVal }, this.updateVal)
   }
 
