@@ -22,9 +22,7 @@ export default class IndexPage extends Component {
 
   updateVal = () => {
     const { from, inputVal } = this.state
-    const arr = inputVal.split('.')
-    const firstPart = arr[0]
-    const lastPart = arr[1]
+    const [firstPart, lastPart] = inputVal.split('.')
     let ouputVal = 0
     if (firstPart) {
       const firstArr = firstPart.split('')
