@@ -1,5 +1,7 @@
 import React, { Component } from 'react'
 
+const validNum = '0123456789abcdefghijklmnopqrstuvwxyz'.split('')
+
 export default class IndexPage extends Component {
   state = {
     from: '10',
@@ -9,8 +11,15 @@ export default class IndexPage extends Component {
   }
 
   setFrom = e => this.setState({ from: e.target.value })
+
   setTo = e => this.setState({ to: e.target.value })
-  inputChange = e =>this.setState({ inputVal: e.target.value }, this.updateVal)
+
+  inputChange = e => {
+    const validRange = [...validNum.slice(0, this.state.from), '.']
+    const inputVal = e.target.value
+    ;(inputVal === '' || validRange.includes(inputVal.slice(-1))) && this.setState({ inputVal }, this.updateVal)
+  }
+
   updateVal = () => {
     const { from, inputVal } = this.state
     const arr = inputVal.split('.')
@@ -21,34 +30,44 @@ export default class IndexPage extends Component {
       const firstArr = firstPart.split('')
       let firstLen = firstArr.length
       firstArr.forEach((i, index) => {
-        ouputVal += Number(i) * (from ** Number(firstLen - (index + 1)))
+        ouputVal += validNum.findIndex(j => j === i) * (from ** Number(firstLen - (index + 1)))
       })
     }
     if (lastPart) {
       lastPart.split('').forEach((i, index) => {
-        ouputVal += Number(i) * (from ** Number(- (index + 1)))
+        ouputVal += validNum.findIndex(j => j === i) * (from ** Number(- (index + 1)))
       })
     }
     this.setState({ ouputVal })
   }
 
   render() {
+    const { from, to, inputVal, ouputVal } = this.state
     return (
       <div>
-        <select onChange={this.setFrom} value={this.state.from}>
-          <option value="2">2</option>
-          <option value="8">8</option>
-          <option value="10">10</option>
-          <option value="16">16</option>
-        </select>
-        <select onChange={this.setTo} value={this.state.to}>
-          <option value="2">2</option>
-          <option value="8">8</option>
-          <option value="10">10</option>
-          <option value="16">16</option>
-        </select>
-        <input type="text" onChange={this.inputChange} value={this.state.inputVal} />
-        <span>{this.state.ouputVal.toString(Number(this.state.to))}</span>
+        <div>
+          从
+          <select onChange={this.setFrom} value={from}>
+            {validNum.map((i, index) => <option value={index + 1} key={index}>{index + 1}</option>)}
+          </select>
+          进制
+        </div>
+
+        <div>
+          到
+          <select onChange={this.setTo} value={to}>
+            {validNum.map((i, index) => <option value={index + 1} key={index}>{index + 1}</option>)}
+          </select>
+          进制
+        </div>
+
+        <div>
+          输入<input type="text" onChange={this.inputChange} value={inputVal} />
+        </div>
+
+        <div>
+          输出<span>{ouputVal.toString(Number(to))}</span>
+        </div>
       </div>
     )
   }
