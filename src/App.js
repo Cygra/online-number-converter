@@ -1,4 +1,8 @@
 import React, { Component } from 'react'
+import Select from '@material-ui/core/Select';
+import MenuItem from '@material-ui/core/MenuItem';
+import TextField from '@material-ui/core/TextField';
+import './App.css'
 
 const validNum = '0123456789abcdefghijklmnopqrstuvwxyz'.split('')
 
@@ -10,9 +14,7 @@ export default class IndexPage extends Component {
     ouputVal: 0,
   }
 
-  setFrom = e => this.setState({ from: e.target.value })
-
-  setTo = e => this.setState({ to: e.target.value })
+  setPos = name => e => this.setState({ [name]: e.target.value })
 
   inputChange = e => {
     const validRange = [...validNum.slice(0, this.state.from), '.']
@@ -39,33 +41,20 @@ export default class IndexPage extends Component {
     this.setState({ ouputVal })
   }
 
+  options = () => validNum.map((_, i) => <MenuItem value={i + 1} key={i} classes={{ root: 'root-menu-item' }}>{i + 1}</MenuItem>)
+  select = (p, v) => <Select onChange={this.setPos(p)} value={v}>{this.options()}</Select>
+
   render() {
     const { from, to, inputVal, ouputVal } = this.state
     return (
-      <div>
-        <div>
-          从
-          <select onChange={this.setFrom} value={from}>
-            {validNum.map((i, index) => <option value={index + 1} key={index}>{index + 1}</option>)}
-          </select>
-          进制
+      <div className="main">
+        <div className="converter-comp gh-link">
+          支持小数的在线进位制转换&nbsp;<span role="img" aria-label="convert">🌀</span>
         </div>
-
-        <div>
-          到
-          <select onChange={this.setTo} value={to}>
-            {validNum.map((i, index) => <option value={index + 1} key={index}>{index + 1}</option>)}
-          </select>
-          进制
-        </div>
-
-        <div>
-          输入<input type="text" onChange={this.inputChange} value={inputVal} />
-        </div>
-
-        <div>
-          输出<span>{ouputVal.toString(Number(to))}</span>
-        </div>
+        <div className="converter-comp">从&nbsp;&nbsp;&nbsp;{this.select('from', from)}&nbsp;&nbsp;&nbsp;进制</div>
+        <div className="converter-comp">到&nbsp;&nbsp;&nbsp;{this.select('to', to)}&nbsp;&nbsp;&nbsp;进制</div>
+        <div className="converter-comp">输入&nbsp;&nbsp;&nbsp;<TextField onChange={this.inputChange} value={inputVal} /></div>
+        <div className="converter-comp">输出&nbsp;&nbsp;&nbsp;<TextField value={ouputVal.toString(Number(to))} disabled /></div>
       </div>
     )
   }
