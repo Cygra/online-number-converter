@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
 import TextField from '@material-ui/core/TextField';
-import './App.css'
+import './App.scss'
 
 const validNum = '0123456789abcdefghijklmnopqrstuvwxyz'.split('')
 
