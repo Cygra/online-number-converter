@@ -21,6 +21,12 @@ export default class IndexPage extends Component<{}, IndexPageState> {
     ouputVal: 0,
   }
 
+  componentDidUpdate = (_: {}, prevState: IndexPageState): void => {
+    const { from, to } = this.state
+    prevState.from !== from && this.setState({ inputVal: '' }, this.updateVal)
+    prevState.to !== to && this.updateVal()
+  }
+
   setPos = (name: 'from' | 'to'): ((e: React.ChangeEvent<HTMLSelectElement>) => void) => {
     return (e: React.ChangeEvent<HTMLSelectElement>): void => {
       this.setState(c => ({ ...c, [name]: e.target.value }))
@@ -79,7 +85,7 @@ export default class IndexPage extends Component<{}, IndexPageState> {
         <div className="converter-comp">从&nbsp;&nbsp;&nbsp;{this.select('from', from)}&nbsp;&nbsp;&nbsp;进制</div>
         <div className="converter-comp">到&nbsp;&nbsp;&nbsp;{this.select('to', to)}&nbsp;&nbsp;&nbsp;进制</div>
         <div className="converter-comp">输入&nbsp;&nbsp;&nbsp;<TextField onChange={this.inputChange} value={inputVal} /></div>
-        <div className="converter-comp">输出&nbsp;&nbsp;&nbsp;<TextField value={ouputVal.toString(Number(to))} disabled /></div>
+        <div className="converter-comp">输出&nbsp;&nbsp;&nbsp;<TextField value={ouputVal === 0 ? '' : ouputVal.toString(Number(to))} disabled /></div>
       </div>
     )
   }
