@@ -41,7 +41,7 @@ export default class IndexPage extends Component<{}, IndexPageState> {
       const firstArr = firstPart.split('')
       let firstLen = firstArr.length
       firstArr.forEach((i: string, index: number): void => {
-        ouputVal += validNum.findIndex(j => j === i) * (from ** firstLen - (index + 1))
+        ouputVal += validNum.findIndex(j => j === i) * (from ** (firstLen - (index + 1)))
       })
     }
     if (lastPart) {
