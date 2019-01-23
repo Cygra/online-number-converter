@@ -6,43 +6,68 @@ import './App.scss'
 
 const validNum = '0123456789abcdefghijklmnopqrstuvwxyz'.split('')
 
-export default class IndexPage extends Component {
+interface IndexPageState {
+  from: number,
+  to: number,
+  inputVal: string,
+  ouputVal: number,
+}
+
+export default class IndexPage extends Component<{}, IndexPageState> {
   state = {
-    from: '10',
-    to: '10',
+    from: 10,
+    to: 10,
     inputVal: '',
     ouputVal: 0,
   }
 
-  setPos = name => e => this.setState({ [name]: e.target.value })
+  setPos = (name: 'from' | 'to'): ((e: React.ChangeEvent<HTMLSelectElement>) => void) => {
+    return (e: React.ChangeEvent<HTMLSelectElement>): void => {
+      this.setState(c => ({ ...c, [name]: e.target.value }))
+    }
+  }
 
-  inputChange = e => {
+  inputChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     const validRange = [...validNum.slice(0, this.state.from), '.']
     const inputVal = e.target.value.toLowerCase()
     ;(inputVal === '' || validRange.includes(inputVal.slice(-1))) && this.setState({ inputVal }, this.updateVal)
   }
 
-  updateVal = () => {
+  updateVal = (): void => {
     const { from, inputVal } = this.state
     const [firstPart, lastPart] = inputVal.split('.')
     let ouputVal = 0
     if (firstPart) {
       const firstArr = firstPart.split('')
       let firstLen = firstArr.length
-      firstArr.forEach((i, index) => {
-        ouputVal += validNum.findIndex(j => j === i) * (from ** Number(firstLen - (index + 1)))
+      firstArr.forEach((i: string, index: number): void => {
+        ouputVal += validNum.findIndex(j => j === i) * (from ** firstLen - (index + 1))
       })
     }
     if (lastPart) {
-      lastPart.split('').forEach((i, index) => {
-        ouputVal += validNum.findIndex(j => j === i) * (from ** Number(- (index + 1)))
+      lastPart.split('').forEach((i: string, index: number): void => {
+        ouputVal += validNum.findIndex(j => j === i) * (from ** (- (index + 1)))
       })
     }
     this.setState({ ouputVal })
   }
 
-  options = () => validNum.map((_, i) => <MenuItem value={i + 1} key={i} classes={{ root: 'root-menu-item' }}>{i + 1}</MenuItem>)
-  select = (p, v) => <Select onChange={this.setPos(p)} value={v}>{this.options()}</Select>
+  options = (): JSX.Element[] => {
+    return validNum.map((_, i): JSX.Element => {
+      return (
+        <MenuItem value={i + 1} key={i} classes={{ root: 'root-menu-item' }}>
+          {i + 1}
+        </MenuItem>
+      )
+    })
+  }
+  select = (p: 'from' | 'to', v: number): JSX.Element => {
+    return (
+      <Select onChange={this.setPos(p)} value={v}>
+        {this.options()}
+      </Select>
+    )
+  }
 
   render() {
     const { from, to, inputVal, ouputVal } = this.state
