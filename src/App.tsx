@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
 import TextField from '@material-ui/core/TextField';
+import Button from '@material-ui/core/Button';
 import './App.scss'
 
 const validNum = '0123456789abcdefghijklmnopqrstuvwxyz'.split('')
@@ -23,8 +24,8 @@ export default class IndexPage extends Component<{}, IndexPageState> {
 
   componentDidUpdate = (_: {}, prevState: IndexPageState): void => {
     const { from, to } = this.state
-    prevState.from !== from && this.setState({ inputVal: '' }, this.updateVal)
-    prevState.to !== to && this.updateVal()
+    prevState.from !== from && this.setState({ inputVal: '', ouputVal: 0 })
+    prevState.to !== to && this.setState({ ouputVal: 0 })
   }
 
   setPos = (name: 'from' | 'to'): ((e: React.ChangeEvent<HTMLSelectElement>) => void) => {
@@ -36,7 +37,7 @@ export default class IndexPage extends Component<{}, IndexPageState> {
   inputChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     const validRange = [...validNum.slice(0, this.state.from), '.']
     const inputVal = e.target.value.toLowerCase()
-    ;(inputVal === '' || validRange.includes(inputVal.slice(-1))) && this.setState({ inputVal }, this.updateVal)
+    ;(inputVal === '' || validRange.includes(inputVal.slice(-1))) && this.setState({ inputVal })
   }
 
   updateVal = (): void => {
@@ -67,6 +68,7 @@ export default class IndexPage extends Component<{}, IndexPageState> {
       )
     })
   }
+
   select = (p: 'from' | 'to', v: number): JSX.Element => {
     return (
       <Select onChange={this.setPos(p)} value={v}>
@@ -85,6 +87,7 @@ export default class IndexPage extends Component<{}, IndexPageState> {
         <div className="converter-comp">从&nbsp;&nbsp;&nbsp;{this.select('from', from)}&nbsp;&nbsp;&nbsp;进制</div>
         <div className="converter-comp">到&nbsp;&nbsp;&nbsp;{this.select('to', to)}&nbsp;&nbsp;&nbsp;进制</div>
         <div className="converter-comp">输入&nbsp;&nbsp;&nbsp;<TextField onChange={this.inputChange} value={inputVal} /></div>
+        <div className="converter-comp"><Button variant="contained" onClick={this.updateVal}>转换</Button></div>
         <div className="converter-comp">输出&nbsp;&nbsp;&nbsp;<TextField value={ouputVal === 0 ? '' : ouputVal.toString(Number(to))} disabled /></div>
       </div>
     )
