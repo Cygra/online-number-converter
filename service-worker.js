@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/3.6.3/workbox-sw.js");
 
 importScripts(
-  "/online-number-converter/precache-manifest.26e91409e6176aad46fc1b0a982ce660.js"
+  "/online-number-converter/precache-manifest.314c6ae2e048ca5899eedfac2bb56997.js"
 );
 
 workbox.clientsClaim();
