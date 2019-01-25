@@ -1,4 +1,4 @@
-.main {
+.converter-container {
   margin: 20px;
   display: flex;
   flex-direction: column;
@@ -6,9 +6,15 @@
   justify-content: flex-start;
   .converter-comp {
     margin-bottom: 16px;
-    &.gh-link {
+    &.converter-title {
       display: flex;
-      align-self: center;
+      align-items: center;
+      svg {
+        transition: all .15s;
+        &:hover {
+          transform: rotate(90deg);
+        }
+      }
     }
   }
 }
